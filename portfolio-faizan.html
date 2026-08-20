@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faizan Bhat — Web Developer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&family=Work+Sans:wght@300;400;500&display=swap');
+
+  :root{
+    --ink: #0B1220;
+    --ink-deep: #070B14;
+    --paper: #EDE6D6;
+    --brass: #C9A227;
+    --teal: #3AAFA9;
+    --slate: #9AA5B1;
+    --white: #F5F3EE;
+    --line: rgba(245,243,238,0.12);
+    --serif: 'Fraunces', Georgia, serif;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Work Sans', sans-serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--ink);
+    color: var(--white);
+    font-family: var(--sans);
+    font-weight:300;
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+
+  a{ color:inherit; }
+
+  ::selection{ background: var(--brass); color: var(--ink); }
+
+  /* ---------- ROUTE PROGRESS RAIL ---------- */
+  .route-rail{
+    position:fixed; left:28px; top:50%; transform:translateY(-50%);
+    height:40vh; width:1px; background:var(--line); z-index:90;
+  }
+  .route-rail-fill{
+    position:absolute; top:0; left:0; width:100%; height:0%;
+    background: linear-gradient(var(--teal), var(--brass));
+    transition: height .1s linear;
+  }
+  .route-rail-dot{
+    position:absolute; left:50%; top:0%; width:7px; height:7px;
+    background: var(--brass); border-radius:50%; transform:translate(-50%,-50%);
+    box-shadow:0 0 8px var(--brass); transition: top .1s linear;
+  }
+  @media (max-width: 820px){ .route-rail{ display:none; } }
+
+  a, button, .navlinks a, .contact-links a, .scroll-cue, .work-item, .toolkit-item, .approach-card{
+    cursor: pointer;
+  }
+
+  /* ---------- CUSTOM CURSOR (desktop / fine pointer only) ---------- */
+  @media (hover: hover) and (pointer: fine){
+    body{ cursor:none; }
+    a, button{ cursor:none; }
+
+    .cursor-dot, .cursor-ring{
+      position:fixed; top:0; left:0; z-index:9999;
+      pointer-events:none; border-radius:50%;
+      transform:translate(-50%, -50%);
+    }
+    .cursor-dot{
+      width:6px; height:6px; background:var(--brass);
+      transition: opacity .2s ease;
+    }
+    .cursor-ring{
+      width:32px; height:32px; border:1px solid var(--teal);
+      opacity:0.6;
+      transition: width .25s ease, height .25s ease, border-color .25s ease, opacity .25s ease;
+    }
+    .cursor-ring.is-hover{
+      width:54px; height:54px; border-color:var(--brass); opacity:0.9;
+    }
+    body.cursor-hidden .cursor-dot,
+    body.cursor-hidden .cursor-ring{ opacity:0; }
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 22px 6vw;
+    mix-blend-mode: difference;
+  }
+  .logo{
+    font-family: var(--mono); font-size:14px; letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+  .navlinks{ display:flex; gap:32px; font-family:var(--mono); font-size:12px; letter-spacing:0.06em; text-transform:uppercase; }
+  .navlinks a{ text-decoration:none; opacity:0.8; transition:opacity .25s; }
+  .navlinks a:hover{ opacity:1; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    height:100vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding: 0 6vw;
+    overflow:hidden;
+  }
+
+  .hero-layer{ position:absolute; inset:0; pointer-events:none; will-change:transform; }
+
+  .route-path{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+  }
+  .route-line{
+    fill:none; stroke: var(--brass); stroke-width:1; opacity:0.35;
+    stroke-dasharray: 6 8;
+  }
+  .route-dot{ fill: var(--teal); opacity:0.7; }
+
+  .grid-lines{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity:0.4;
+  }
+
+  .compass{
+    position:absolute; top:14%; right:8%; width:180px; height:180px;
+    opacity:0.5;
+  }
+
+  .eyebrow{
+    font-family: var(--mono); font-size:12px; letter-spacing:0.15em;
+    text-transform:uppercase; color: var(--teal);
+    margin-bottom:22px; position:relative; z-index:2;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{
+    content:''; width:24px; height:1px; background:var(--teal);
+  }
+
+  .hero h1{
+    font-family: var(--serif); font-weight:500;
+    font-size: clamp(2.6rem, 7vw, 6rem);
+    line-height:1.02;
+    max-width:14ch;
+    position:relative; z-index:2;
+  }
+  .hero h1 em{ font-style:italic; color: var(--brass); font-weight:300; }
+
+  .hero-sub{
+    margin-top:26px; max-width:44ch; color: var(--slate);
+    font-size:17px; position:relative; z-index:2;
+  }
+
+  .hero-coords{
+    position:absolute; bottom:48px; left:6vw;
+    font-family:var(--mono); font-size:12px; color:var(--slate);
+    letter-spacing:0.05em; display:flex; gap:28px;
+  }
+  .hero-coords span b{ color:var(--white); font-weight:500; }
+
+  .scroll-cue{
+    position:absolute; bottom:48px; right:6vw;
+    font-family:var(--mono); font-size:11px; color:var(--slate);
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    letter-spacing:0.1em; text-transform:uppercase;
+  }
+  .scroll-cue .line{ width:1px; height:40px; background:var(--line); position:relative; overflow:hidden; }
+  .scroll-cue .line::after{
+    content:''; position:absolute; top:-40px; left:0; width:100%; height:40px;
+    background:var(--brass); animation: dropline 2.2s ease-in-out infinite;
+  }
+  @keyframes dropline{ to{ top:100%; } }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ position:relative; padding: 140px 6vw; }
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:64px; flex-wrap:wrap; gap:20px;
+  }
+  .section-num{
+    font-family:var(--mono); font-size:12px; color:var(--brass);
+    letter-spacing:0.1em;
+  }
+  .section-title{
+    font-family:var(--serif); font-size: clamp(2rem, 4vw, 3rem);
+    font-weight:500;
+  }
+  .section-note{ font-family:var(--mono); font-size:12px; color:var(--slate); max-width:32ch; text-align:right; }
+
+  .reveal{ opacity:0; transform: translateY(36px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.is-visible{ opacity:1; transform:none; }
+
+  /* title wipe reveal */
+  .title-wrap{ overflow:hidden; display:inline-block; }
+  .title-wrap span{
+    display:inline-block; transform: translateY(105%);
+    transition: transform .9s cubic-bezier(.22,1,.36,1);
+  }
+  .title-wrap.is-visible span{ transform:translateY(0); }
+
+  /* draw-on-scroll svg paths */
+  .work-visual svg path{
+    stroke-dasharray: 500;
+    stroke-dashoffset: 500;
+    transition: stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1);
+  }
+  .work-item.is-visible .work-visual svg path{ stroke-dashoffset:0; }
+
+  /* number/tag pop-in */
+  .work-item .work-route{ opacity:0; transform:translateX(-10px); transition: opacity .6s ease .2s, transform .6s ease .2s; }
+  .work-item.is-visible .work-route{ opacity:1; transform:none; }
+  .work-tags span{ opacity:0; transform:translateY(8px); transition: opacity .5s ease, transform .5s ease; }
+  .work-item.is-visible .work-tags span{ opacity:1; transform:none; }
+  .work-item.is-visible .work-tags span:nth-child(1){ transition-delay:.35s; }
+  .work-item.is-visible .work-tags span:nth-child(2){ transition-delay:.45s; }
+
+  /* approach card lift */
+  .approach-card{ transition: transform .4s ease, background .4s ease; }
+  .approach-card:hover{ transform: translateY(-6px); background: var(--ink-deep); }
+
+  /* ---------- WORK ---------- */
+  .work-list{ display:flex; flex-direction:column; }
+  .work-item{
+    display:grid; grid-template-columns: 90px 1fr 1fr; gap:32px;
+    padding: 44px 0; border-top:1px solid var(--line);
+    align-items:center;
+  }
+  .work-item:last-child{ border-bottom:1px solid var(--line); }
+  .work-route{ font-family:var(--mono); font-size:12px; color:var(--teal); }
+  .work-main h3{
+    font-family:var(--serif); font-size:1.8rem; font-weight:500; margin-bottom:10px;
+  }
+  .work-main p{ color:var(--slate); font-size:15px; max-width:48ch; }
+  .work-tags{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .work-tags span{
+    font-family:var(--mono); font-size:11px; color:var(--brass);
+    border:1px solid rgba(201,162,39,0.4); padding:4px 10px; border-radius:2px;
+  }
+  .work-visual{
+    height:160px; border-radius:4px; position:relative; overflow:hidden;
+    background: linear-gradient(135deg, rgba(58,175,169,0.12), rgba(201,162,39,0.08));
+    border:1px solid var(--line);
+  }
+  .work-visual::before{
+    content: attr(data-tag);
+    position:absolute; bottom:12px; right:14px;
+    font-family:var(--mono); font-size:11px; color:var(--slate);
+  }
+  .work-visual svg{ position:absolute; inset:0; width:100%; height:100%; opacity:0.6; }
+
+  /* ---------- TOOLKIT ---------- */
+  .toolkit-grid{
+    display:flex; flex-wrap:wrap; gap:14px;
+  }
+  .tool-stamp{
+    font-family: var(--mono); font-size:13px; letter-spacing:0.03em;
+    padding:14px 20px; border:1px solid var(--line); border-radius:2px;
+    position:relative; opacity:0; transform: translateY(20px) rotate(-1deg);
+    transition: opacity .6s ease, transform .6s ease, border-color .3s ease, color .3s ease;
+    color: var(--slate);
+  }
+  .toolkit-grid.is-visible .tool-stamp{ opacity:1; transform: translateY(0) rotate(0deg); }
+  .tool-stamp:hover{ border-color: var(--brass); color: var(--white); }
+  .tool-stamp:nth-child(odd):hover{ transform: rotate(-1.5deg); }
+  .tool-stamp:nth-child(even):hover{ transform: rotate(1.5deg); }
+  .toolkit-grid.is-visible .tool-stamp:nth-child(1){ transition-delay:.05s; }
+  .toolkit-grid.is-visible .tool-stamp:nth-child(2){ transition-delay:.1s; }
+  .toolkit-grid.is-visible .tool-stamp:nth-child(3){ transition-delay:.15s; }
+  .toolkit-grid.is-visible .tool-stamp:nth-child(4){ transition-delay:.2s; }
+  .toolkit-grid.is-visible .tool-stamp:nth-child(5){ transition-delay:.25s; }
+  .toolkit-grid.is-visible .tool-stamp:nth-child(6){ transition-delay:.3s; }
+  .toolkit-grid.is-visible .tool-stamp:nth-child(7){ transition-delay:.35s; }
+  .toolkit-grid.is-visible .tool-stamp:nth-child(8){ transition-delay:.4s; }
+
+  /* ---------- TOOLKIT ---------- */
+  .toolkit{ padding-top:0; padding-bottom:0; }
+  .toolkit-list{
+    display:flex; flex-wrap:wrap; gap:0;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .toolkit-item{
+    flex:1 1 160px;
+    display:flex; align-items:center; gap:12px;
+    padding:22px 20px; border-right:1px solid var(--line);
+    font-family:var(--mono); font-size:13px; letter-spacing:0.03em;
+    opacity:0; transform:translateY(16px);
+    transition: opacity .5s ease, transform .5s ease, background .3s ease;
+  }
+  .toolkit-item.is-visible{ opacity:1; transform:none; }
+  .toolkit-item:hover{ background: var(--ink-deep); }
+  .toolkit-item .mark{
+    width:6px; height:6px; border-radius:50%; background:var(--teal); flex-shrink:0;
+  }
+  .toolkit-item:nth-child(even) .mark{ background: var(--brass); }
+
+  /* ---------- APPROACH ---------- */
+  .approach-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:2px;
+    background: var(--line);
+  }
+  .approach-card{
+    background: var(--ink); padding:40px 32px;
+  }
+  .approach-card .num{ font-family:var(--mono); color:var(--brass); font-size:13px; margin-bottom:20px; }
+  .approach-card h4{ font-family:var(--serif); font-size:1.4rem; font-weight:500; margin-bottom:12px; }
+  .approach-card p{ color:var(--slate); font-size:14px; }
+
+  /* ---------- CONTACT ---------- */
+  .contact{
+    display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:40px;
+    border-top:1px solid var(--line);
+  }
+  .contact h2{
+    font-family: var(--serif); font-size: clamp(2rem, 5vw, 4rem); font-weight:500; max-width:16ch;
+  }
+  .contact h2 em{ font-style:italic; color:var(--teal); }
+  .contact-links{ display:flex; flex-direction:column; gap:14px; font-family:var(--mono); font-size:14px; }
+  .contact-links a{ text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:2px; transition:border-color .25s, color .25s; }
+  .contact-links a:hover{ border-color:var(--brass); color:var(--brass); }
+
+  footer{
+    padding: 30px 6vw; display:flex; justify-content:space-between;
+    font-family:var(--mono); font-size:11px; color:var(--slate);
+    border-top:1px solid var(--line);
+  }
+
+  @media (max-width: 820px){
+    .work-item{ grid-template-columns:1fr; gap:16px; }
+    .approach-grid{ grid-template-columns:1fr; }
+    .navlinks{ display:none; }
+    .compass{ display:none; }
+    .section-note{ text-align:left; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .hero-layer{ transform:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+<div class="route-rail"><div class="route-rail-fill"></div><div class="route-rail-dot"></div></div>
+
+<nav>
+  <div class="logo">FAIZAN BHAT / DEV</div>
+  <div class="navlinks">
+    <a href="#work">Work</a>
+    <a href="#toolkit">Toolkit</a>
+    <a href="#approach">Approach</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-layer grid-lines" data-speed="0.15"></div>
+
+  <svg class="hero-layer route-path" data-speed="0.25" viewBox="0 0 1200 800" preserveAspectRatio="none">
+    <path class="route-line" d="M -50 620 C 200 520, 380 700, 600 560 S 950 380, 1250 460" />
+    <circle class="route-dot" cx="200" cy="547" r="4"/>
+    <circle class="route-dot" cx="600" cy="560" r="4"/>
+    <circle class="route-dot" cx="950" cy="400" r="4"/>
+  </svg>
+
+  <svg class="hero-layer compass" data-speed="0.4" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="46" fill="none" stroke="var(--brass)" stroke-width="0.6"/>
+    <circle cx="50" cy="50" r="2" fill="var(--brass)"/>
+    <line x1="50" y1="6" x2="50" y2="94" stroke="var(--brass)" stroke-width="0.4" opacity="0.5"/>
+    <line x1="6" y1="50" x2="94" y2="50" stroke="var(--brass)" stroke-width="0.4" opacity="0.5"/>
+    <path d="M50 14 L56 50 L50 86 L44 50 Z" fill="var(--teal)" opacity="0.7"/>
+    <text x="50" y="10" text-anchor="middle" fill="var(--slate)" font-size="6" font-family="monospace">N</text>
+  </svg>
+
+  <div class="eyebrow">Currently building — Srinagar</div>
+  <h1>I build web things that <em>get you there.</em></h1>
+  <p class="hero-sub">Front-to-back web development — from Elementor-built travel sites to custom interfaces. I plan the route, then build every mile of it.</p>
+
+  <div class="hero-coords">
+    <span>LAT <b>34.0837° N</b></span>
+    <span>LON <b>74.7973° E</b></span>
+    <span>STATUS <b>Available for work</b></span>
+  </div>
+
+  <div class="scroll-cue"><span>Scroll</span><div class="line"></div></div>
+</section>
+
+<!-- ============ WORK ============ -->
+<section id="work">
+  <div class="section-head reveal">
+    <div>
+      <div class="section-num">01 / SELECTED WORK</div>
+      <div class="section-title title-wrap reveal"><span>Recent routes</span></div>
+    </div>
+    <div class="section-note">Six stops from the last year of building. Each one shipped, live, and in use.</div>
+  </div>
+
+  <div class="work-list">
+
+    <div class="work-item reveal" style="transition-delay:0s">
+      <div class="work-route">→ 001</div>
+      <div class="work-main">
+        <h3>Techpay.ai</h3>
+        <p>A device-financing platform connecting local retailers with flexible payment plans, so customers can access technology without a large upfront cost.</p>
+        <div class="work-tags"><span>React</span><span>Next.js</span></div>
+      </div>
+      <div class="work-visual" data-tag="fintech / financing">
+        <svg viewBox="0 0 300 160"><path d="M0 120 C 60 90, 120 140, 180 100 S 260 60, 300 90" stroke="var(--teal)" stroke-width="1" fill="none" opacity="0.7"/></svg>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.08s">
+      <div class="work-route">→ 002</div>
+      <div class="work-main">
+        <h3>Techserv.ai</h3>
+        <p>An IT services and consulting platform — presenting service offerings, case studies, and a clear path for businesses to get technical support.</p>
+        <div class="work-tags"><span>WordPress</span><span>JavaScript</span></div>
+      </div>
+      <div class="work-visual" data-tag="consulting / IT services">
+        <svg viewBox="0 0 300 160"><path d="M0 60 C 80 100, 140 20, 220 70 S 280 130, 300 80" stroke="var(--brass)" stroke-width="1" fill="none" opacity="0.7"/></svg>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.16s">
+      <div class="work-route">→ 003</div>
+      <div class="work-main">
+        <h3>Ampll.life</h3>
+        <p>A pharmaceutical brand site covering ethical and OTC healthcare products, built to serve both healthcare professionals and everyday customers.</p>
+        <div class="work-tags"><span>WordPress</span><span>Shopify</span></div>
+      </div>
+      <div class="work-visual" data-tag="pharma / healthcare">
+        <svg viewBox="0 0 300 160"><path d="M0 100 C 70 40, 150 130, 220 60 S 270 20, 300 50" stroke="var(--teal)" stroke-width="1" fill="none" opacity="0.7"/></svg>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.24s">
+      <div class="work-route">→ 004</div>
+      <div class="work-main">
+        <h3>Happymiles.in</h3>
+        <p>An educational tour operator's site — program pages, curriculum-aligned trip details, and enquiry flows for schools booking student travel.</p>
+        <div class="work-tags"><span>WordPress</span><span>Elementor</span></div>
+      </div>
+      <div class="work-visual" data-tag="education / travel">
+        <svg viewBox="0 0 300 160"><path d="M0 90 C 60 50, 130 120, 200 80 S 260 40, 300 70" stroke="var(--brass)" stroke-width="1" fill="none" opacity="0.7"/></svg>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.32s">
+      <div class="work-route">→ 005</div>
+      <div class="work-main">
+        <h3>Glotrip</h3>
+        <p>A full travel agency website — booking flows, destination pages, and a content system the client's team can run without touching code.</p>
+        <div class="work-tags"><span>WordPress</span><span>Elementor</span><span>Hostinger</span></div>
+      </div>
+      <div class="work-visual" data-tag="travel / booking">
+        <svg viewBox="0 0 300 160"><path d="M0 120 C 60 90, 120 140, 180 100 S 260 60, 300 90" stroke="var(--teal)" stroke-width="1" fill="none" opacity="0.7"/></svg>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.4s">
+      <div class="work-route">→ 006</div>
+      <div class="work-main">
+        <h3>Aida</h3>
+        <p>An AI-powered SaaS product — interface and front-end build for a product centered on AI-driven workflows.</p>
+        <div class="work-tags"><span>React</span><span>Framer</span></div>
+      </div>
+      <div class="work-visual" data-tag="AI / SaaS">
+        <svg viewBox="0 0 300 160"><path d="M0 70 C 70 110, 140 30, 210 80 S 270 120, 300 90" stroke="var(--teal)" stroke-width="1" fill="none" opacity="0.7"/></svg>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ APPROACH ============ -->
+<section id="toolkit" class="toolkit">
+  <div class="section-head reveal" style="margin-bottom:0; padding-bottom:32px;">
+    <div>
+      <div class="section-num">02 / TOOLKIT</div>
+      <div class="section-title">Stack &amp; tools</div>
+    </div>
+    <div class="section-note">What I build with, day to day.</div>
+  </div>
+  <div class="toolkit-list">
+    <div class="toolkit-item"><span class="mark"></span>WordPress</div>
+    <div class="toolkit-item"><span class="mark"></span>React</div>
+    <div class="toolkit-item"><span class="mark"></span>Next.js</div>
+    <div class="toolkit-item"><span class="mark"></span>HTML</div>
+    <div class="toolkit-item"><span class="mark"></span>CSS</div>
+    <div class="toolkit-item"><span class="mark"></span>JavaScript</div>
+    <div class="toolkit-item"><span class="mark"></span>Wix</div>
+    <div class="toolkit-item"><span class="mark"></span>Shopify</div>
+    <div class="toolkit-item"><span class="mark"></span>Framer</div>
+  </div>
+</section>
+
+<section id="approach">
+  <div class="section-head reveal">
+    <div>
+      <div class="section-num">03 / APPROACH</div>
+      <div class="section-title title-wrap reveal"><span>How I work</span></div>
+    </div>
+  </div>
+
+  <div class="approach-grid">
+    <div class="approach-card reveal" style="transition-delay:0s">
+      <div class="num">01</div>
+      <h4>Plan the route</h4>
+      <p>Every build starts with what the page actually needs to do — not a template. Structure follows purpose.</p>
+    </div>
+    <div class="approach-card reveal" style="transition-delay:0.15s">
+      <div class="num">02</div>
+      <h4>Build in the open</h4>
+      <p>Working drafts, not silent disappearances. You see progress as it happens, not just at the end.</p>
+    </div>
+    <div class="approach-card reveal" style="transition-delay:0.3s">
+      <div class="num">03</div>
+      <h4>Ship and hand off</h4>
+      <p>Clean, documented, and set up so you can maintain it — or I keep supporting it, your call.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="contact reveal" style="padding-top:64px;">
+    <h2>Got a project? <em>Let's map it out.</em></h2>
+    <div class="contact-links">
+      <a href="mailto:bhatfaizan2@gmail.com">bhatfaizan2@gmail.com</a>
+      <a href="https://github.com/faizang-del" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/faizan-bhat-b052b1282" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Faizan Bhat</span>
+  <span>Built with care, no template</span>
+</footer>
+
+<script>
+  // Parallax on scroll
+  const layers = document.querySelectorAll('.hero-layer');
+  const compass = document.querySelector('.compass');
+  const railFill = document.querySelector('.route-rail-fill');
+  const railDot = document.querySelector('.route-rail-dot');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function onScroll(){
+    const y = window.scrollY;
+
+    if(!reduceMotion){
+      layers.forEach(layer => {
+        const speed = parseFloat(layer.dataset.speed || 0.2);
+        const extra = layer === compass ? ` rotate(${y * 0.04}deg)` : '';
+        layer.style.transform = `translateY(${y * speed}px)${extra}`;
+      });
+    }
+
+    // scroll progress rail
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? Math.min(y / docHeight, 1) : 0;
+    if(railFill && railDot){
+      railFill.style.height = (progress * 100) + '%';
+      railDot.style.top = (progress * 100) + '%';
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Toolkit items: staggered reveal
+  const toolkitItems = document.querySelectorAll('.toolkit-item');
+  toolkitItems.forEach((el, i) => { el.style.transitionDelay = (i * 0.06) + 's'; });
+  const toolkitIo = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        toolkitIo.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  toolkitItems.forEach(el => toolkitIo.observe(el));
+
+  // Custom cursor (desktop / fine pointer only)
+  const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if(hasFinePointer){
+    const dot = document.querySelector('.cursor-dot');
+    const ring = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+    let started = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+      if(!started){ ringX = mouseX; ringY = mouseY; started = true; }
+      document.body.classList.remove('cursor-hidden');
+    });
+
+    document.addEventListener('mouseleave', () => document.body.classList.add('cursor-hidden'));
+
+    function animateRing(){
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    const hoverTargets = document.querySelectorAll('a, button, .work-item, .toolkit-item, .approach-card');
+    hoverTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('is-hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('is-hover'));
+    });
+  }
+</script>
+
+</body>
+</html>
